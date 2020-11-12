@@ -33,9 +33,9 @@ reportsRouter
     })
     .get((req, res, next) => {
         const knexInstance = req.app.get('db');
-        ReportsService.getById(knexInstance, req.params.id)
-            .then(report => {
-                res.json(report)
+        ReportsService.getReportFields(knexInstance, req.params.id)
+            .then(field => {
+                res.json(field)
             })
             .catch(next)
     })

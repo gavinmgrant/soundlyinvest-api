@@ -18,90 +18,105 @@ function makeReportsArray() {
 function makeFieldsArray() {
     return [
         {
+            id: 1,
             report_id: 1,
             field_name: 'prop_address',
             field_val: '327 28th St, San Diego, CA 92102, USA',
             field_type: 'string'
         },
         {
+            id: 2,
             report_id: 1,
             field_name: 'purchase_price',
             field_val: '750000',
             field_type: 'integer'
         },
         {
+            id: 3,
             report_id: 1,
             field_name: 'down_payment',
             field_val: '20',
             field_type: 'integer'
         },
         {
+            id: 4,
             report_id: 1,
             field_name: 'interest_rate',
             field_val: '3.75',
             field_type: 'float'
         },
         {
+            id: 5,
             report_id: 1,
             field_name: 'loan_period',
             field_val: '30',
             field_type: 'integer'
         },
         {
+            id: 6,
             report_id: 1,
             field_name: 'rental_income',
             field_val: '3500',
             field_type: 'integer'
         },
         {
+            id: 7,
             report_id: 1,
             field_name: 'storage_income',
             field_val: '50',
             field_type: 'integer'
         },
         {
+            id: 8,
             report_id: 1,
             field_name: 'parking_income',
             field_val: '100',
             field_type: 'integer'
         },
         {
+            id: 9,
             report_id: 1,
             field_name: 'tax_rate',
             field_val: '1.25',
             field_type: 'float'
         },
         {
+            id: 10,
             report_id: 1,
             field_name: 'property_manager',
             field_val: '0',
             field_type: 'integer'
         },
         {
+            id: 11,
             report_id: 1,
             field_name: 'insurance',
             field_val: '120',
             field_type: 'integer'
         },
         {
+            id: 12,
             report_id: 1,
             field_name: 'utilities',
             field_val: '80',
             field_type: 'integer'
         },
         {
+            id: 13,
             report_id: 1,
             field_name: 'gardener',
             field_val: '0',
             field_type: 'integer'
         },
         {
+            id: 14,
             report_id: 1,
             field_name: 'miscellaneous',
             field_val: '100',
             field_type: 'integer'
         },
         {
+            id: 15,
             report_id: 1,
             field_name: 'vacancy_rate',
             field_val: '2',
@@ -177,17 +192,16 @@ function seedUsers(db, users) {
     )
 };
 
-function makeExpectedReports(users, report) {
-    const user = users
-        .find(user => user.id === report.user_id)
-
-    return {
-        id: report.id,
-        report_name: report.report_name,
-        date_created: "2020-11-12T02:35:00.029Z",
-        user_id: user.id,
-    }
-};
+function seedFields(db, users, reports, fields) {
+    return db.transaction(async trx => {
+        await seedUsers(trx, users)
+        await trx.into('soundlyinvest_reports').insert(reports)
+        await trx.into('soundlyinvest_fields').insert(fields)
+        await trx.raw(
+            `SELECT * from soundlyinvest_fields`,      
+        )
+    })    
+}
 
 module.exports = {
     makeReportsArray,
@@ -197,5 +211,5 @@ module.exports = {
     cleanTables,
     seedReportsTables,
     seedUsers,
-    makeExpectedReports,
+    seedFields,
 };

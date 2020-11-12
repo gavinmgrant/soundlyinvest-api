@@ -3,7 +3,6 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 const supertest = require('supertest');
-const { report } = require('../src/reports/reports-router');
 
 describe('Reports Endpoints', function() {
     let db;
@@ -57,11 +56,12 @@ describe('Reports Endpoints', function() {
 
     describe(`GET /api/reports/:id`, () => {
         context(`Given there are reports in the database`, () => {
-            beforeEach('insert reports', () => 
-                helpers.seedReportsTables(
-                    db,
+            beforeEach('insert fields', () => 
+                helpers.seedFields(
+                    db, 
                     testUsers,
                     testReports,
+                    testFields,
                 )
             )
 
@@ -72,15 +72,13 @@ describe('Reports Endpoints', function() {
                     .expect(404, { error: { message: `Report doesn't exist`} })
             })
 
-            it('responds with 200 and the specified favorites', () => {
+            it('responds with 200 and correct fields for the report', () => {
                 const reportId = 1;
-                const expectedReport = helpers.makeExpectedReports(
-                    testUsers,
-                    testReports[0],
-                )
+                const expectedFields = helpers.makeFieldsArray();
+
                 return supertest(app)
                     .get(`/api/reports/${reportId}`)
-                    .expect(200, expectedReport)
+                    .expect(200, expectedFields)
             })
         })
     })
