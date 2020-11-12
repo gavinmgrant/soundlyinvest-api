@@ -1,9 +1,11 @@
-require('dotenv').config()
-const express = require('express')
-const morgan = require('morgan')
-const cors = require('cors')
-const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
+require('dotenv').config();
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const helmet = require('helmet');
+const { NODE_ENV } = require('./config');
+const { CLIENT_ORIGIN } = require('./config');
+const reportsRouter = require('./reports/reports-router');
 
 const app = express()
 
@@ -16,6 +18,8 @@ app.use(
         origin: CLIENT_ORIGIN
     })
 );
+
+app.use('/api/reports', reportsRouter);
 
 app.get('/api/', (req, res) => {
     res.send('Hello, world!');
