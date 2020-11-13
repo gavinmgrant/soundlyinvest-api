@@ -9,14 +9,65 @@ const serializeReport = report => ({
     id: report.id,
     report_name: xss(report.report_name),
     date_created: report.date_created,
+    prop_address: report.prop_address,
+    purchase_price: report.purchase_price,
+    down_payment: report.down_payment,
+    interest_rate: report.interest_rate,
+    loan_period: report.loan_period,
+    rental_income: report.rental_income,
+    storage_income: report.storage_income,
+    parking_income: report.parking_income,
+    tax_rate: report.tax_rate,
+    property_manager: report.property_manager,
+    insurance: report.insurance,
+    utilities: report.utilities,
+    gardener: report.gardener,
+    miscellaneous: report.miscellaneous,
+    vacancy_rate: report.vacancy_rate,
     user_id: report.user_id,
 }) 
 
 reportRouter
     .route('/')
     .post(jsonParser, (req, res, next) => {
-        const { report_name, user_id } = req.body;
-        const newReport = { report_name, user_id };
+        const { 
+            report_name, 
+            prop_address,
+            purchase_price,
+            down_payment,
+            interest_rate,
+            loan_period,
+            rental_income,
+            storage_income,
+            parking_income,
+            tax_rate,
+            property_manager,
+            insurance,
+            utilities,
+            gardener,
+            miscellaneous,
+            vacancy_rate,
+            user_id, 
+        } = req.body;
+        const newReport = { 
+            report_name, 
+            prop_address,
+            purchase_price,
+            down_payment,
+            interest_rate,
+            loan_period,
+            rental_income,
+            storage_income,
+            parking_income,
+            tax_rate,
+            property_manager,
+            insurance,
+            utilities,
+            gardener,
+            miscellaneous,
+            vacancy_rate,
+            user_id,  
+        };
 
         for(const [key, value] of Object.entries(newReport)) {
             if (value == null) {

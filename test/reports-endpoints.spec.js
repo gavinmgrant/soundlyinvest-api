@@ -27,7 +27,6 @@ describe('Reports Endpoints', function() {
     afterEach('cleanup', () => helpers.cleanTables(db))
 
     describe(`GET /api/reports`, () => {
-
         context('Given no reports', () => {
             it('responds with 200 and an empty list', () => {
                 return supertest(app)
@@ -79,5 +78,52 @@ describe('Reports Endpoints', function() {
                     .expect(200, expectedReport[0])
             })
         })
+    })
+
+    describe(`POST /api/report`, () => {
+        beforeEach('insert reports', () => 
+                helpers.seedReports(
+                    db, 
+                    testUsers,
+                    testReports
+                )
+            )
+           
+            it(`creates a report, responding with 201 and the new report`, function() {
+                const testUser = testUsers[0]
+                const newReport = {
+                    report_name: "Temp Report",
+                    prop_address: "100 Main Street",
+                    purchase_price: 500000,
+                    down_payment: 15,
+                    interest_rate: 4,
+                    loan_period: 30,
+                    rental_income: 3700,
+                    storage_income: 0,
+                    parking_income: 0,
+                    tax_rate: 1.25,
+                    property_manager: 100,
+                    insurance: 100,
+                    utilities: 50,
+                    gardener: 0,
+                    miscellaneous: 100,
+                    vacancy_rate: 2,
+                    user_id: testUser.id
+                }
+                return supertest(app)
+                    .post('/api/report')
+                    .send(newReport)
+                    .expect(201)
+                    .expect(res => {
+                        expect(res.body).to.have.property('id')
+                        expect(res.body.prop_address).to.eq(newReport.prop_address)
+                        expect(res.headers.location).to.eq(`/reports/${res.body.id}`)
+                    })
+                    .then(postRes =>
+                        supertest(app)
+                            .get(`/api/reports/${postRes.body.id}`)
+                            .expect(postRes.body)
+                    )
+            })     
     })
 })
