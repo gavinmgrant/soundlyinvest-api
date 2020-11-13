@@ -15,8 +15,8 @@ const serializeReport = report => ({
 reportRouter
     .route('/')
     .post(jsonParser, (req, res, next) => {
-        const { report_name, date_created, user_id } = req.body;
-        const newReport = { report_name, date_created, user_id };
+        const { report_name, user_id } = req.body;
+        const newReport = { report_name, user_id };
 
         for(const [key, value] of Object.entries(newReport)) {
             if (value == null) {
