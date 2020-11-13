@@ -10,7 +10,7 @@ const serializeReport = report => ({
     report_name: xss(report.report_name),
     date_created: report.date_created,
     user_id: report.user_id,
-})
+}) 
 
 reportRouter
     .route('/')
@@ -39,6 +39,5 @@ reportRouter
                     .json(serializeReport(report))
             })
             .catch(next)
-    })
 
 module.exports = reportRouter;
