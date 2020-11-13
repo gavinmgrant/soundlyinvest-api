@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
 const { CLIENT_ORIGIN } = require('./config');
+const reportRouter = require('./report/report-router');
 const reportsRouter = require('./reports/reports-router');
 
 const app = express()
@@ -19,6 +20,7 @@ app.use(
     })
 );
 
+app.use('/api/report', reportRouter);
 app.use('/api/reports', reportsRouter);
 
 app.get('/api/', (req, res) => {
