@@ -2,7 +2,6 @@ const express = require('express');
 const ReportsService = require('./reports-service');
 
 const reportsRouter = express.Router();
-const jsonParser = express.json();
 
 reportsRouter
     .route('/')
@@ -33,9 +32,9 @@ reportsRouter
     })
     .get((req, res, next) => {
         const knexInstance = req.app.get('db');
-        ReportsService.getReportFields(knexInstance, req.params.id)
-            .then(field => {
-                res.json(field)
+        ReportsService.getById(knexInstance, req.params.id)
+            .then(report => {
+                res.json(report)
             })
             .catch(next)
     })

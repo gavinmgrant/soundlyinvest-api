@@ -2,125 +2,45 @@ function makeReportsArray() {
     return [
         {
             id: 1,
-            report_name: 'Test Report 1',
+            report_name: "Test Report 1",
             date_created: "2020-11-12T02:35:00.029Z",
+            prop_address: "327 28th St, San Diego, CA 92102, USA",
+            purchase_price: 750000,
+            down_payment: 20,
+            interest_rate: 3.75,
+            loan_period: 30,
+            rental_income: 3500,
+            storage_income: 50,
+            parking_income: 100,
+            tax_rate: 1.25,
+            property_manager: 0,
+            insurance: 120,
+            utilities: 80,
+            gardener: 0,
+            miscellaneous: 100,
+            vacancy_rate: 2,
             user_id: 1
         },
         {
             id: 2,
-            report_name: 'Test Report 2',
+            report_name: "Test Report 2",
             date_created: "2020-11-12T02:35:00.029Z",
+            prop_address: "4112 Nordica St, San Diego, CA 92113",
+            purchase_price: 800000,
+            down_payment: 20,
+            interest_rate: 3.5,
+            loan_period: 20,
+            rental_income: 4000,
+            storage_income: 0,
+            parking_income: 0,
+            tax_rate: 1,
+            property_manager: 0,
+            insurance: 140,
+            utilities: 100,
+            gardener: 50,
+            miscellaneous: 150,
+            vacancy_rate: 3,
             user_id: 1
-        },
-    ]
-};
-
-function makeFieldsArray() {
-    return [
-        {
-            id: 1,
-            report_id: 1,
-            field_name: 'prop_address',
-            field_val: '327 28th St, San Diego, CA 92102, USA',
-            field_type: 'string'
-        },
-        {
-            id: 2,
-            report_id: 1,
-            field_name: 'purchase_price',
-            field_val: '750000',
-            field_type: 'integer'
-        },
-        {
-            id: 3,
-            report_id: 1,
-            field_name: 'down_payment',
-            field_val: '20',
-            field_type: 'integer'
-        },
-        {
-            id: 4,
-            report_id: 1,
-            field_name: 'interest_rate',
-            field_val: '3.75',
-            field_type: 'float'
-        },
-        {
-            id: 5,
-            report_id: 1,
-            field_name: 'loan_period',
-            field_val: '30',
-            field_type: 'integer'
-        },
-        {
-            id: 6,
-            report_id: 1,
-            field_name: 'rental_income',
-            field_val: '3500',
-            field_type: 'integer'
-        },
-        {
-            id: 7,
-            report_id: 1,
-            field_name: 'storage_income',
-            field_val: '50',
-            field_type: 'integer'
-        },
-        {
-            id: 8,
-            report_id: 1,
-            field_name: 'parking_income',
-            field_val: '100',
-            field_type: 'integer'
-        },
-        {
-            id: 9,
-            report_id: 1,
-            field_name: 'tax_rate',
-            field_val: '1.25',
-            field_type: 'float'
-        },
-        {
-            id: 10,
-            report_id: 1,
-            field_name: 'property_manager',
-            field_val: '0',
-            field_type: 'integer'
-        },
-        {
-            id: 11,
-            report_id: 1,
-            field_name: 'insurance',
-            field_val: '120',
-            field_type: 'integer'
-        },
-        {
-            id: 12,
-            report_id: 1,
-            field_name: 'utilities',
-            field_val: '80',
-            field_type: 'integer'
-        },
-        {
-            id: 13,
-            report_id: 1,
-            field_name: 'gardener',
-            field_val: '0',
-            field_type: 'integer'
-        },
-        {
-            id: 14,
-            report_id: 1,
-            field_name: 'miscellaneous',
-            field_val: '100',
-            field_type: 'integer'
-        },
-        {
-            id: 15,
-            report_id: 1,
-            field_name: 'vacancy_rate',
-            field_val: '2',
-            field_type: 'integer'
         },
     ]
 };
@@ -137,9 +57,8 @@ function makeUsersArray() {
 
 function makeReportsFixtures() {
     const testReports = makeReportsArray();
-    const testFields = makeFieldsArray();
     const testUsers = makeUsersArray();
-    return { testReports, testFields, testUsers };
+    return { testReports, testUsers };
 };
 
 function cleanTables(db) {
@@ -147,24 +66,21 @@ function cleanTables(db) {
         trx.raw(
             `TRUNCATE
             soundlyinvest_reports,
-            soundlyinvest_fields,
             soundlyinvest_users
             `
         )
         .then(() =>
             Promise.all([
                 trx.raw(`ALTER SEQUENCE soundlyinvest_reports_id_seq minvalue 0 START WITH 1`),
-                trx.raw(`ALTER SEQUENCE soundlyinvest_fields_id_seq minvalue 0 START WITH 1`),
                 trx.raw(`ALTER SEQUENCE soundlyinvest_users_id_seq minvalue 0 START WITH 1`),
                 trx.raw(`SELECT setval('soundlyinvest_reports_id_seq', 0)`),
-                trx.raw(`SELECT setval('soundlyinvest_fields_id_seq', 0)`),
                 trx.raw(`SELECT setval('soundlyinvest_users_id_seq', 0)`),
             ])
         )
     )
 };
 
-function seedReportsTables(db, users, reports) {
+function seedReports(db, users, reports) {
     // use a transaction to group the queries and auto rollback on any failure
     return db.transaction(async trx => {
         await seedUsers(trx, users)
@@ -192,24 +108,11 @@ function seedUsers(db, users) {
     )
 };
 
-function seedFields(db, users, reports, fields) {
-    return db.transaction(async trx => {
-        await seedUsers(trx, users)
-        await trx.into('soundlyinvest_reports').insert(reports)
-        await trx.into('soundlyinvest_fields').insert(fields)
-        await trx.raw(
-            `SELECT * from soundlyinvest_fields`,      
-        )
-    })    
-}
-
 module.exports = {
     makeReportsArray,
-    makeFieldsArray,
     makeUsersArray,
     makeReportsFixtures,
     cleanTables,
-    seedReportsTables,
+    seedReports,
     seedUsers,
-    seedFields,
 };

@@ -39,5 +39,6 @@ reportRouter
                     .json(serializeReport(report))
             })
             .catch(next)
+    })
 
 module.exports = reportRouter;

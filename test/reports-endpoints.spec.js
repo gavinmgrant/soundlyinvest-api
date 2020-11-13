@@ -9,7 +9,6 @@ describe('Reports Endpoints', function() {
 
     const {
         testReports,
-        testFields,
         testUsers,
     } = helpers.makeReportsFixtures();
 
@@ -39,7 +38,7 @@ describe('Reports Endpoints', function() {
 
         context('Given there are reports in the database', () => {
             beforeEach('insert reports', () => 
-                helpers.seedReportsTables(
+                helpers.seedReports(
                     db,
                     testUsers,
                     testReports,
@@ -56,12 +55,11 @@ describe('Reports Endpoints', function() {
 
     describe(`GET /api/reports/:id`, () => {
         context(`Given there are reports in the database`, () => {
-            beforeEach('insert fields', () => 
-                helpers.seedFields(
+            beforeEach('insert reports', () => 
+                helpers.seedReports(
                     db, 
                     testUsers,
-                    testReports,
-                    testFields,
+                    testReports
                 )
             )
 
@@ -74,11 +72,11 @@ describe('Reports Endpoints', function() {
 
             it('responds with 200 and correct fields for the report', () => {
                 const reportId = 1;
-                const expectedFields = helpers.makeFieldsArray();
+                const expectedReport = helpers.makeReportsArray();
 
                 return supertest(app)
                     .get(`/api/reports/${reportId}`)
-                    .expect(200, expectedFields)
+                    .expect(200, expectedReport[0])
             })
         })
     })
