@@ -126,4 +126,40 @@ describe('Reports Endpoints', function() {
                     )
             })     
     })
+
+    describe(`DELETE /api/reports/:id`, () => {
+        context(`Given no reports`, () => { 
+            it(`responds with 404`, () => {
+                const id = 999
+                return supertest(app)
+                    .delete(`/api/reports/${id}`)
+                    .expect(404, { 
+                        error: { message: `Report doesn't exist` }
+                    })
+            })
+        })
+
+        context('Given there are reports in the database', () => {
+            beforeEach('insert reports', () => 
+                helpers.seedReports(
+                    db,
+                    testUsers,
+                    testReports,
+                )
+            )
+
+            it('responds with 204 and removes the report', () => {
+                const idToRemove = 1;
+                const expectedReports = testReports.filter(report => report.id !== idToRemove)
+                return supertest(app)
+                    .delete(`/api/reports/${idToRemove}`)
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/reports`)
+                            .expect(expectedReports)    
+                    )
+            })
+        })
+    })
 })

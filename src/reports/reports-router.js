@@ -38,5 +38,13 @@ reportsRouter
             })
             .catch(next)
     })
+    .delete((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        ReportsService.deleteReport(knexInstance, req.params.id)
+            .then(() => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
 
 module.exports = reportsRouter;
