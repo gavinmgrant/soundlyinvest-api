@@ -18,6 +18,11 @@ const ReportsService = {
             // .where('user_id', id)
             .delete()
     },
+    updateReport(knex, id, newReportFields) {
+        return knex('soundlyinvest_reports')
+            .where({ id })
+            .update(newReportFields)
+    },
 };
 
 module.exports = ReportsService;

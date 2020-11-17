@@ -130,7 +130,7 @@ describe('Reports Endpoints', function() {
     describe(`DELETE /api/reports/:id`, () => {
         context(`Given no reports`, () => { 
             it(`responds with 404`, () => {
-                const id = 999
+                const id = 123456
                 return supertest(app)
                     .delete(`/api/reports/${id}`)
                     .expect(404, { 
@@ -159,6 +159,75 @@ describe('Reports Endpoints', function() {
                             .get(`/api/reports`)
                             .expect(expectedReports)    
                     )
+            })
+        })
+    })
+
+    describe(`PATCH /api/reports/:id`, () => {
+        context(`Given no reports`, () => {
+            it(`responds with 404`, () => {
+                const reportId = 123456
+                return supertest(app)
+                    .patch(`/api/reports/${reportId}`)
+                    .expect(404, { error: { message: `Report doesn't exist` } })
+            })
+        })
+
+        context('Given there are reports in the database', () => {
+            beforeEach('insert reports', () => 
+                helpers.seedReports(
+                    db, 
+                    testUsers,
+                    testReports
+                )
+            )
+        
+            it('responds with 204 and updates the report', () => {
+                const idToUpdate = 2
+                const updateReport = {
+                    report_name: 'New Name',
+                    prop_address: "4112 Nordica St, San Diego, CA 92113",
+                    purchase_price: 899000,
+                    down_payment: 15,
+                    interest_rate: 3.5,
+                    loan_period: 20,
+                    rental_income: 4000,
+                    storage_income: 0,
+                    parking_income: 0,
+                    tax_rate: 1,
+                    property_manager: 0,
+                    insurance: 140,
+                    utilities: 100,
+                    gardener: 50,
+                    miscellaneous: 150,
+                    vacancy_rate: 3,
+                    user_id: 1
+                }
+                const expectedReport = {
+                    ...testReports[idToUpdate - 1],
+                    ...updateReport
+                }
+                return supertest(app)
+                    .patch(`/api/reports/${idToUpdate}`)
+                    .send(updateReport)
+                    .expect(204)
+                    .then(res =>
+                        supertest(app)
+                            .get(`/api/reports/${idToUpdate}`)
+                            .expect(expectedReport)    
+                    )
+                })
+
+            it(`responds with 400 with no fields supplied`, () => {
+                const idToUpdate = 2
+                return supertest(app)
+                    .patch(`/api/reports/${idToUpdate}`)
+                    .send({ irrelevantField: 'foo' })
+                    .expect(400, {
+                        error: {
+                            message: `Request body must contain at least one updated field`
+                        }
+                    })
             })
         })
     })
