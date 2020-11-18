@@ -83,7 +83,6 @@ describe('Auth Endpoints', function() {
             )
             return supertest(app)
                 .post('/api/auth/login')
-                .set('Authorization', helpers.makeAuthHeader(testUser))
                 .send(userValidCreds)
                 .expect(200, {
                     authToken: expectedToken,
