@@ -1,14 +1,16 @@
 const express = require('express');
 const ReportsService = require('./reports-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const reportsRouter = express.Router();
 const jsonParser = express.json();
 
 reportsRouter
     .route('/')
+    .all(requireAuth)
     .get((req, res, next) => {
         const knexInstance = req.app.get('db');
-        ReportsService.getAllReports(knexInstance)
+        ReportsService.getAllReports(knexInstance, req.user.id)
             .then(reports => {
                 res.json(reports)
             })
@@ -17,6 +19,7 @@ reportsRouter
 
 reportsRouter
     .route('/:id')
+    .all(requireAuth)
     .all((req, res, next) => {
         const knexInstance = req.app.get('db');
         ReportsService.getById(knexInstance, req.params.id)
@@ -41,7 +44,7 @@ reportsRouter
     })
     .delete((req, res, next) => {
         const knexInstance = req.app.get('db')
-        ReportsService.deleteReport(knexInstance, req.params.id)
+        ReportsService.deleteReport(knexInstance, req.params.id, req.user.id)
             .then(() => {
                 res.status(204).end()
             })

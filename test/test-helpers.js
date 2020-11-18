@@ -1,3 +1,6 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 function makeReportsArray() {
     return [
         {
@@ -49,7 +52,12 @@ function makeUsersArray() {
     return [
         {
             id: 1,
-            user_name: 'test',
+            user_name: 'test-user-1',
+            password: 'password',
+        },
+        {
+            id: 2,
+            user_name: 'test-user-2',
             password: 'password',
         },
     ]
@@ -108,6 +116,14 @@ function seedUsers(db, users) {
     )
 };
 
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+    const token = jwt.sign({ user_id: user.id }, secret, {
+        subject: user.user_name,
+        algorithm: 'HS256',
+    })
+    return `Bearer ${token}`
+};
+
 module.exports = {
     makeReportsArray,
     makeUsersArray,
@@ -115,4 +131,5 @@ module.exports = {
     cleanTables,
     seedReports,
     seedUsers,
+    makeAuthHeader,
 };

@@ -1,6 +1,7 @@
 const express = require('express');
 const xss = require('xss');
 const ReportService = require('./report-service');
+const { requireAuth } = require('../middleware/jwt-auth');
 
 const reportRouter = express.Router();
 const jsonParser = express.json();
@@ -29,6 +30,7 @@ const serializeReport = report => ({
 
 reportRouter
     .route('/')
+    .all(requireAuth)
     .post(jsonParser, (req, res, next) => {
         const { 
             report_name, 
@@ -77,7 +79,7 @@ reportRouter
             }
         }
 
-        // newReport.user_id = req.user.id;
+        newReport.user_id = req.user.id;
 
         ReportService.insertReport(
             req.app.get('db'),

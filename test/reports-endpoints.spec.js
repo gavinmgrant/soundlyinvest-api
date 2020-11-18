@@ -28,9 +28,13 @@ describe('Reports Endpoints', function() {
 
     describe(`GET /api/reports`, () => {
         context('Given no reports', () => {
+            beforeEach(() =>
+                helpers.seedUsers(db, testUsers)
+            )
             it('responds with 200 and an empty list', () => {
                 return supertest(app)
                     .get('/api/reports')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
             })
         })
@@ -47,6 +51,7 @@ describe('Reports Endpoints', function() {
             it('GET /reports responds with 200 and all of the reports', () => {
                 return supertest(app)
                     .get('/api/reports')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200)
             })
         })
@@ -66,6 +71,7 @@ describe('Reports Endpoints', function() {
                 const reportId = 999
                 return supertest(app)
                     .get(`/api/reports/${reportId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404, { error: { message: `Report doesn't exist`} })
             })
 
@@ -75,6 +81,7 @@ describe('Reports Endpoints', function() {
 
                 return supertest(app)
                     .get(`/api/reports/${reportId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(200, expectedReport[0])
             })
         })
@@ -112,6 +119,7 @@ describe('Reports Endpoints', function() {
                 }
                 return supertest(app)
                     .post('/api/report')
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newReport)
                     .expect(201)
                     .expect(res => {
@@ -122,6 +130,7 @@ describe('Reports Endpoints', function() {
                     .then(postRes =>
                         supertest(app)
                             .get(`/api/reports/${postRes.body.id}`)
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(postRes.body)
                     )
             })     
@@ -129,10 +138,15 @@ describe('Reports Endpoints', function() {
 
     describe(`DELETE /api/reports/:id`, () => {
         context(`Given no reports`, () => { 
+            beforeEach(() =>
+                helpers.seedUsers(db, testUsers)
+            )
+
             it(`responds with 404`, () => {
                 const id = 123456
                 return supertest(app)
                     .delete(`/api/reports/${id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404, { 
                         error: { message: `Report doesn't exist` }
                     })
@@ -153,10 +167,12 @@ describe('Reports Endpoints', function() {
                 const expectedReports = testReports.filter(report => report.id !== idToRemove)
                 return supertest(app)
                     .delete(`/api/reports/${idToRemove}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(204)
                     .then(res =>
                         supertest(app)
                             .get(`/api/reports`)
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(expectedReports)    
                     )
             })
@@ -165,10 +181,14 @@ describe('Reports Endpoints', function() {
 
     describe(`PATCH /api/reports/:id`, () => {
         context(`Given no reports`, () => {
+            beforeEach(() =>
+                helpers.seedUsers(db, testUsers)
+            )
             it(`responds with 404`, () => {
                 const reportId = 123456
                 return supertest(app)
                     .patch(`/api/reports/${reportId}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .expect(404, { error: { message: `Report doesn't exist` } })
             })
         })
@@ -209,11 +229,13 @@ describe('Reports Endpoints', function() {
                 }
                 return supertest(app)
                     .patch(`/api/reports/${idToUpdate}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(updateReport)
                     .expect(204)
                     .then(res =>
                         supertest(app)
                             .get(`/api/reports/${idToUpdate}`)
+                            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                             .expect(expectedReport)    
                     )
                 })
@@ -222,6 +244,7 @@ describe('Reports Endpoints', function() {
                 const idToUpdate = 2
                 return supertest(app)
                     .patch(`/api/reports/${idToUpdate}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send({ irrelevantField: 'foo' })
                     .expect(400, {
                         error: {

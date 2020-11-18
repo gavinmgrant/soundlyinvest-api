@@ -1,8 +1,8 @@
 const ReportsService = {
-    getAllReports(knex) {
+    getAllReports(knex, id) {
         return knex
             .select('*')
-            // .where('user_id', id)
+            .where('user_id', id)
             .from('soundlyinvest_reports')
     },
     getById(knex, id) {
@@ -12,10 +12,10 @@ const ReportsService = {
             .where('id', id)
             .first()
     },
-    deleteReport(knex, id) {
+    deleteReport(knex, id, userId) {
         return knex ('soundlyinvest_reports')
             .where({ id })
-            // .where('user_id', id)
+            .where('user_id', userId)
             .delete()
     },
     updateReport(knex, id, newReportFields) {
