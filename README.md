@@ -97,6 +97,239 @@ TEST_DATABASE_URL="postgresql://YOUR_USERNAME@localhost/YOUR_TEST_DATABASE_NAME"
     │   └── /
     ├── DELETE 
     │    └── /:id  
-    └──  PATCH
+    └── PATCH
          └── /:id 
+```
+
+### POST `/api/auth/login`
+```
+// req.body
+{
+    user_name: String,
+    password: String
+}
+
+// res.body
+{
+    authToken: String,
+    user_id: Integer,
+    user_name: String
+}
+```
+
+### POST `/api/auth/refresh`
+```
+// req.header
+authorization: bearer ${token}
+
+// res.body
+{
+    authToken: ${token}
+}
+```
+
+### POST `/api/users`
+```
+// req.body
+{
+    user_name: String,
+    password: String
+}
+
+// res.body
+{
+    id: Integer,
+    user_name: String
+}
+```
+
+### GET `/api/reports`
+```
+// req.header
+authorization: bearer ${token}
+
+// req.body
+{
+    user_id: Integer
+}
+
+// res.body
+{
+    id: Integer,
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
+```
+
+### GET `/api/reports/:id`
+```
+// req.header
+authorization: bearer ${token}
+
+// req.params
+{
+    id: Integer
+}
+
+// res.body
+{
+    id: Integer,
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
+```
+
+### POST `/api/reports`
+```
+// req.header
+authorization: bearer ${token}
+
+// req.body
+{
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
+
+// res.body
+{
+    id: Integer,
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
+```
+
+### DELETE `/api/reports/:id`
+```
+// req.header
+authorization: bearer ${token}
+
+// req.params
+{
+    id: Integer
+}
+
+// req.body
+{
+    user_id: Integer
+}
+```
+
+### PATCH `/api/reports/:id`
+```
+// req.header
+authorization: bearer ${token}
+
+// req.params
+{
+    id: Integer
+}
+
+// req.body
+{
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
+
+// res.body
+{
+    id: Integer,
+    report_name: String,
+    date_created: Timestamp,
+    prop_address: String,
+    purchase_price: Interger,
+    down_payment: Interger,
+    interest_rate: Float,
+    loan_period: Interger,
+    rental_income: Interger,
+    storage_income: Interger,
+    parking_income: Interger,
+    tax_rate: Float,
+    property_manager: Interger,
+    insurance: Interger,
+    utilities: Interger,
+    gardener: Interger,
+    miscellaneous: Interger,
+    vacancy_rate: Interger,
+    user_id: Integrer,
+}
 ```
