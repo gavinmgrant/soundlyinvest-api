@@ -1,6 +1,6 @@
 # SoundlyInvest API
 
-This is a project using a PostgreSQL database and Express server for the SoundlyInvest app. In three steps, you get a detailed investment report displaying key investment metrics, such as gross rent multiplier, cap rate, net operating income, and cash flow.
+This is a project using a PostgreSQL database and Express server for the SoundlyInvest, a rental property calculator app. In three steps, you get a detailed investment report displaying key investment metrics, such as gross rent multiplier, cap rate, net operating income, and cash flow.
 
 ## SoundlyInvest Client
 
