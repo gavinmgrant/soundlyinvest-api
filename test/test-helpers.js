@@ -104,7 +104,7 @@ function seedReports(db, users, reports) {
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
         ...user,
-        //password: bcrypt.hashSync(user.password, 1)
+        password: bcrypt.hashSync(user.password, 1)
     }))
     return db.into('soundlyinvest_users').insert(preppedUsers)
     .then(() =>
