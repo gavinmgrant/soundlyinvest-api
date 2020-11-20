@@ -44,11 +44,6 @@ describe('Protected endpoints', function() {
             method: supertest(app).get,
         },
         {
-            name: 'POST /api/report',
-            path: '/api/report',
-            method: supertest(app).post,
-        },
-        {
             name: 'PATCH /api/reports/:id',
             path: '/api/reports/1',
             method: supertest(app).patch,

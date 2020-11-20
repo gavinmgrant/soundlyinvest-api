@@ -5,6 +5,15 @@ const ReportsService = {
             .where('user_id', id)
             .from('soundlyinvest_reports')
     },
+    insertReport(knex, newReport) {
+        return knex 
+            .insert(newReport)
+            .into('soundlyinvest_reports')
+            .returning('*')
+            .then(rows => {
+                return rows[0]
+            })
+    },
     getById(knex, id) {
         return knex 
             .from('soundlyinvest_reports')

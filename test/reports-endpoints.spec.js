@@ -87,7 +87,7 @@ describe('Reports Endpoints', function() {
         })
     })
 
-    describe(`POST /api/report`, () => {
+    describe(`POST /api/reports`, () => {
         beforeEach('insert reports', () => 
                 helpers.seedReports(
                     db, 
@@ -118,7 +118,7 @@ describe('Reports Endpoints', function() {
                     user_id: testUser.id
                 }
                 return supertest(app)
-                    .post('/api/report')
+                    .post('/api/reports')
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                     .send(newReport)
                     .expect(201)
